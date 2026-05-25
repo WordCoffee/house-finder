@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomeBase — Nationwide Property Search</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="dark">
+
+  <!-- ── TOP NAV ─────────────────────────────────────────────────────── -->
+  <nav class="topnav">
+    <div class="topnav-left">
+      <div class="logo">
+        <span class="logo-icon">⌂</span>
+        <span class="logo-text">HomeBase</span>
+      </div>
+    </div>
+    <div class="topnav-center">
+      <div class="hero-search" id="heroSearchWrap">
+        <input
+          id="locationInput"
+          class="hero-search-input"
+          type="text"
+          placeholder="City, ZIP, county, state, or address…"
+          autocomplete="off"
+        />
+        <button class="hero-search-btn" onclick="triggerSearch()">Search</button>
+      </div>
+    </div>
+    <div class="topnav-right">
+      <button class="nav-btn ghost" id="savedBtn" onclick="showSaved()">♡ Saved <span id="savedCount" class="badge-count">0</span></button>
+      <button class="nav-btn ghost" id="themeToggle" onclick="toggleTheme()">☀</button>
+    </div>
+  </nav>
+
+  <!-- ── FILTER BAR ───────────────────────────────────────────────────── -->
+  <div class="filterbar" id="filterbar">
+    <div class="filterbar-inner">
+
+      <div class="filter-group">
+        <label class="filter-label">Status</label>
+        <select class="filter-select" id="f_status">
+          <option value="for_sale">For Sale</option>
+          <option value="new">New Listings</option>
+          <option value="pending">Pending</option>
+          <option value="sold">Sold</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Price</label>
+        <div class="range-pair">
+          <input class="filter-input" type="number" id="f_minPrice" placeholder="No min" />
+          <span class="range-sep">–</span>
+          <input class="filter-input" type="number" id="f_maxPrice" placeholder="$700k" value="700000" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Beds</label>
+        <select class="filter-select" id="f_beds">
+          <option value="">Any</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3" selected>3+</option>
+          <option value="4">4+</option>
+          <option value="5">5+</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Baths</label>
+        <select class="filter-select" id="f_baths">
+          <option value="">Any</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Type</label>
+        <select class="filter-select" id="f_type">
+          <option value="">Any</option>
+          <option value="house">House</option>
+          <option value="condo">Condo</option>
+          <option value="townhome">Townhome</option>
+          <option value="land">Land</option>
+          <option value="multi">Multi-family</option>
+          <option value="manufactured">Manufactured</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Acres</label>
+        <div class="range-pair">
+          <input class="filter-input" type="number" id="f_minAcres" placeholder="Min" value="1" step="0.5" />
+          <span class="range-sep">–</span>
+          <input class="filter-input" type="number" id="f_maxAcres" placeholder="Max" step="0.5" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Sq Ft</label>
+        <div class="range-pair">
+          <input class="filter-input" type="number" id="f_minSqft" placeholder="Min" />
+          <span class="range-sep">–</span>
+          <input class="filter-input" type="number" id="f_maxSqft" placeholder="Max" />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Year Built</label>
+        <div class="range-pair">
+          <input class="filter-input" type="number" id="f_minYear" placeholder="From" />
+          <span class="range-sep">–</span>
+          <input class="filter-input" type="number" id="f_maxYear" placeholder="To" />
+        </div>
+      </div>
+
+      <div class="filter-group wide">
+        <label class="filter-label">Features</label>
+        <div class="feature-chips" id="featureChips">
+          <button class="chip" data-key="pool" onclick="toggleChip(this)">Pool</button>
+          <button class="chip" data-key="garage" onclick="toggleChip(this)">Garage</button>
+          <button class="chip" data-key="waterfront" onclick="toggleChip(this)">Waterfront</button>
+          <button class="chip" data-key="basement" onclick="toggleChip(this)">Basement</button>
+          <button class="chip" data-key="ranch" onclick="toggleChip(this)">Ranch</button>
+          <button class="chip" data-key="horse" onclick="toggleChip(this)">Horse property</button>
+          <button class="chip" data-key="fenced" onclick="toggleChip(this)">Fenced</button>
+          <button class="chip" data-key="guest" onclick="toggleChip(this)">Guest house</button>
+          <button class="chip" data-key="fireplace" onclick="toggleChip(this)">Fireplace</button>
+          <button class="chip" data-key="ac" onclick="toggleChip(this)">A/C</button>
+          <button class="chip" data-key="newkitchen" onclick="toggleChip(this)">Updated kitchen</button>
+          <button class="chip" data-key="fixerupper" onclick="toggleChip(this)">Fixer upper</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Sort</label>
+        <select class="filter-select" id="f_sort">
+          <option value="newest">Newest</option>
+          <option value="price_asc">Price ↑</option>
+          <option value="price_desc">Price ↓</option>
+          <option value="acres_desc">Lot size ↓</option>
+          <option value="beds_desc">Beds ↓</option>
+        </select>
+      </div>
+
+      <div class="filter-group actions-group">
+        <button class="filter-btn primary" onclick="triggerSearch()">Apply filters</button>
+        <button class="filter-btn ghost" onclick="resetFilters()">Reset</button>
+        <button class="filter-btn ghost" onclick="saveCurrentFilters()">Save search</button>
+      </div>
+
+    </div>
+
+    <div class="filterbar-meta">
+      <div class="result-count" id="resultCount">—</div>
+      <div class="provider-status" id="providerStatus"></div>
+    </div>
+  </div>
+
+  <!-- ── MAIN LAYOUT ──────────────────────────────────────────────────── -->
+  <div class="app-body" id="appBody">
+
+    <!-- LIST PANEL -->
+    <section class="list-panel" id="listPanel">
+      <div class="list-panel-inner" id="listingsGrid">
+        <!-- cards injected here -->
+      </div>
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-icon">🏡</div>
+        <div class="empty-title">No listings found</div>
+        <div class="empty-sub">Try adjusting your filters, location, or switching data source.</div>
+      </div>
+      <div id="loadingState" class="loading-state hidden">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading listings…</div>
+      </div>
+    </section>
+
+    <!-- MAP PANEL -->
+    <section class="map-panel" id="mapPanel">
+      <div class="map-placeholder" id="mapPlaceholder">
+        <div class="map-note">
+          <div class="map-icon">🗺</div>
+          <div class="map-title">Interactive map coming in v2</div>
+          <div class="map-sub">When an API key is wired in, listings will plot on a full map here. For now, use the list view on the left.</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ── DETAIL MODAL ─────────────────────────────────────────────────── -->
+  <div class="modal-overlay hidden" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-gallery" id="modalGallery"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- ── SAVED PANEL ──────────────────────────────────────────────────── -->
+  <div class="side-panel hidden" id="savedPanel">
+    <div class="side-panel-header">
+      <h2>Saved homes</h2>
+      <button class="modal-close" onclick="hideSaved()">✕</button>
+    </div>
+    <div class="side-panel-body" id="savedList"></div>
+  </div>
+
+  <!-- ── PROVIDER TOOLBAR ─────────────────────────────────────────────── -->
+  <div class="provider-toolbar" id="providerToolbar">
+    <label class="filter-label" style="margin-bottom:0">Source</label>
+    <select class="filter-select" id="providerSelect" onchange="onProviderChange()"></select>
+    <div class="usage-pill" id="usagePill">—</div>
+    <button class="filter-btn ghost small" onclick="loadSample()">Sample data</button>
+  </div>
+
+  <!-- ── MOBILE MAP TOGGLE ────────────────────────────────────────────── -->
+  <button class="mobile-map-toggle" id="mobileMapToggle" onclick="toggleMobileMap()">Show map</button>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
