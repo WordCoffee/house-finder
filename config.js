@@ -1,133 +1,223 @@
 // ═══════════════════════════════════════════════════════════════
 //  config.js  –  HomeBase
-//  Add your API keys here. Keep this file private.
-//  Never push real keys to a public GitHub repo.
 // ═══════════════════════════════════════════════════════════════
 
+// Tiers: which providers belong in which layer
+window.PROVIDER_TIERS = {
+  tier1: ['realtorOpen','realtorScraper','zllwWorking'],
+  tier2: ['realfinUS','redfinComData','redfinBase','redfinRealtime','realEstateUS','zillowAlt'],
+  tier3: ['realtorApi','zillwRealtime','rentcast'],
+};
+
+// Providers
 window.PROVIDERS = {
-
-  // ── Sample (offline, no keys needed) ────────────────────────
-  sample: {
-    id:           'sample',
-    label:        'Sample data (offline)',
+  realtorOpen: {
+    id:           'realtorOpen',
+    label:        'Realtor.com Open',
+    tier:         1,
     enabled:      true,
-    maxFreeCalls: Infinity,
-    note:         'No API calls. Good for testing the UI.',
+    manualOnly:   False,
+    maxFreeCalls: 3000,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'realtor-com4.p.rapidapi.com',
+    searchUrl:    'https://realtor-com4.p.rapidapi.com/for-sale/list',
   },
-
-  // ── RentCast (direct API) ────────────────────────────────────
-  // Sign up at: https://www.rentcast.io/api
-  // 50 free calls / month on Developer plan
+  realtorScraper: {
+    id:           'realtorScraper',
+    label:        'Realtor.com Scraper',
+    tier:         1,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 500,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'realtor-com-scraper.p.rapidapi.com',
+    searchUrl:    'https://realtor-com-scraper.p.rapidapi.com/for-sale/list',
+  },
+  zllwWorking: {
+    id:           'zllwWorking',
+    label:        'ZLLW Working API',
+    tier:         1,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 500,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'zllw-working-api.p.rapidapi.com',
+    searchUrl:    'https://zllw-working-api.p.rapidapi.com/search',
+  },
+  realfinUS: {
+    id:           'realfinUS',
+    label:        'Realfin US',
+    tier:         2,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 110,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'realfin-us.p.rapidapi.com',
+    searchUrl:    'https://realfin-us.p.rapidapi.com/for-sale/list',
+  },
+  redfinComData: {
+    id:           'redfinComData',
+    label:        'Redfin.com Data',
+    tier:         2,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 100,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'redfin-com-data-api.p.rapidapi.com',
+    searchUrl:    'https://redfin-com-data-api.p.rapidapi.com/search/for-sale',
+  },
+  redfinBase: {
+    id:           'redfinBase',
+    label:        'Redfin Base',
+    tier:         2,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 100,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'redfin-base.p.rapidapi.com',
+    searchUrl:    'https://redfin-base.p.rapidapi.com/for-sale',
+  },
+  redfinRealtime: {
+    id:           'redfinRealtime',
+    label:        'Real-Time Redfin Data',
+    tier:         2,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 100,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'real-time-redfin-data.p.rapidapi.com',
+    searchUrl:    'https://real-time-redfin-data.p.rapidapi.com/search',
+  },
+  realEstateUS: {
+    id:           'realEstateUS',
+    label:        'Real Estate US',
+    tier:         2,
+    enabled:      true,
+    manualOnly:   False,
+    maxFreeCalls: 100,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'us-real-estate.p.rapidapi.com',
+    searchUrl:    'https://us-real-estate.p.rapidapi.com/for-sale',
+  },
+  realtorApi: {
+    id:           'realtorApi',
+    label:        'Realtor (Deep Check)',
+    tier:         3,
+    enabled:      true,
+    manualOnly:   True,
+    maxFreeCalls: 30,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'realty-in-us.p.rapidapi.com',
+    searchUrl:    'https://realty-in-us.p.rapidapi.com/properties/v3/list',
+  },
+  zillwRealtime: {
+    id:           'zillwRealtime',
+    label:        'Zillw Realtime (Deep Check)',
+    tier:         3,
+    enabled:      true,
+    manualOnly:   True,
+    maxFreeCalls: 4,
+    apiKey:       '3ebf15a882mshff3d94a00febef5p127044jsn52e52d74a11d',
+    apiHost:      'zillw-realtime-scraper.p.rapidapi.com',
+    searchUrl:    'https://zillw-realtime-scraper.p.rapidapi.com/search',
+  },
   rentcast: {
     id:           'rentcast',
-    label:        'RentCast',
-    enabled:      false,
+    label:        'RentCast (Accuracy Pass)',
+    tier:         3,
+    enabled:      true,
+    manualOnly:   True,
     maxFreeCalls: 50,
-    apiKey:       'YOUR_RENTCAST_KEY',
-    // Listings search endpoint (check their docs for exact URL)
-    searchUrl:    'https://api.rentcast.io/v1/listings/sale', // sale listings
+    alertAt:      25,
+    apiKey:       'a840a7bccd684ae3b22cc72667ccc9ac',
+    searchUrl:    'https://api.rentcast.io/v1/listings/sale',
   },
-
-  // ── Realty in US (Realtor.com data via RapidAPI) ─────────────
-  // Subscribe at: https://rapidapi.com/apidojo/api/realty-in-us
-  realtyUS: {
-    id:           'realtyUS',
-    label:        'Realty in US (RapidAPI)',
-    enabled:      false,
-    maxFreeCalls: 500,
-    apiKey:       'YOUR_RAPIDAPI_KEY',
-    apiHost:      'realty-in-us.p.rapidapi.com',
-    searchUrl:    'https://realty-in-us.p.rapidapi.com/properties/v3/list', // verify current docs
-  },
-
-  // ── US Real Estate Listings (APImaker via RapidAPI) ──────────
-  // Subscribe at: https://rapidapi.com/apimaker/api/us-real-estate-listings
-  usListings: {
-    id:           'usListings',
-    label:        'US Real Estate (RapidAPI)',
-    enabled:      false,
-    maxFreeCalls: 500,
-    apiKey:       'YOUR_RAPIDAPI_KEY',
-    apiHost:      'us-real-estate-listings.p.rapidapi.com',
-    searchUrl:    'https://us-real-estate-listings.p.rapidapi.com/list', // verify current docs
-  },
-
-  // ── OpenWeb Ninja – Real-Time Zillow Data ────────────────────
-  // Sign up at: https://www.openwebninja.com/api/real-time-zillow-data
   zillowAlt: {
     id:           'zillowAlt',
-    label:        'Zillow-style (OpenWeb Ninja)',
-    enabled:      false,
+    label:        'Zillow Real-Time (OpenWeb)',
+    tier:         2,
+    enabled:      true,
+    manualOnly:   False,
     maxFreeCalls: 250,
-    apiKey:       'YOUR_OPENWEB_NINJA_KEY',
-    searchUrl:    'https://YOUR_OPENWEB_NINJA_ENDPOINT', // paste your endpoint
+    apiKey:       'ak_5nvbjic82j5863g02k76aj5f7bi333ao5fz0uc3aahumc3m',
+    searchUrl:    'https://api.openwebninja.com/v1/zillow/search',
   },
 };
 
-// ── Usage counter (localStorage) ────────────────────────────────
+// Monthly usage tracking
 window.getUsage = (id) => {
   try {
-    const s = JSON.parse(localStorage.getItem('hb_usage') || '{}');
+    const key = 'hb_usage_' + new Date().toISOString().slice(0,7);
+    const s = JSON.parse(localStorage.getItem(key) || '{}');
     return s[id] || 0;
   } catch { return 0; }
 };
 
 window.bumpUsage = (id) => {
   try {
-    const s = JSON.parse(localStorage.getItem('hb_usage') || '{}');
+    const key = 'hb_usage_' + new Date().toISOString().slice(0,7);
+    const s = JSON.parse(localStorage.getItem(key) || '{}');
     s[id] = (s[id] || 0) + 1;
-    localStorage.setItem('hb_usage', JSON.stringify(s));
-  } catch { /* ignore */ }
+    localStorage.setItem(key, JSON.stringify(s));
+    const p = window.PROVIDERS[id];
+    if (p && p.alertAt) {
+      const notifyKey = 'hb_alert_' + id + '_' + new Date().toISOString().slice(0,7);
+      const alerted = localStorage.getItem(notifyKey);
+      if (s[id] >= p.alertAt && !alerted) {
+        localStorage.setItem(notifyKey, '1');
+        showRentcastAlert(s[id], p.maxFreeCalls);
+      }
+    }
+  } catch {}
 };
 
-// ── Saved listings (localStorage) ───────────────────────────────
+window.canUseProvider = (id) => {
+  try {
+    const p = window.PROVIDERS[id];
+    if (!p) return false;
+    if (!isFinite(p.maxFreeCalls)) return true;
+    return window.getUsage(id) < p.maxFreeCalls;
+  } catch { return false; }
+};
+
+function showRentcastAlert(used, max) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
+  const box = document.createElement('div');
+  box.style.cssText = 'background:var(--bg-card);border-radius:16px;padding:28px 24px;max-width:380px;width:90%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.5)';
+  box.innerHTML = `
+    <div style="font-size:36px;margin-bottom:12px">⚠️</div>
+    <div style="font-size:17px;font-weight:800;margin-bottom:8px">RentCast usage alert</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5">
+      You've used <strong>${used} of ${max}</strong> RentCast calls this month.<br>
+      Switch to the combined free sources for routine searches and save RentCast for final accuracy checks.
+    </div>
+    <button onclick="this.closest('[style]').remove()" style="background:var(--accent);color:var(--accent-text);border:none;padding:10px 24px;border-radius:999px;font-weight:700;cursor:pointer;font-size:14px">Got it</button>
+  `;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
+// Saved listings
 window.getSaved = () => {
-  try { return JSON.parse(localStorage.getItem('hb_saved') || '[]'); }
-  catch { return []; }
+  try { return JSON.parse(localStorage.getItem('hb_saved') || '[]'); } catch { return []; }
 };
-
 window.setSaved = (arr) => {
-  try { localStorage.setItem('hb_saved', JSON.stringify(arr)); }
-  catch { /* ignore */ }
+  try { localStorage.setItem('hb_saved', JSON.stringify(arr)); } catch {}
 };
-
 window.toggleSaved = (listing) => {
   const arr = window.getSaved();
   const idx = arr.findIndex(l => l.id === listing.id);
-  if (idx === -1) {
-    arr.push(listing);
-  } else {
-    arr.splice(idx, 1);
-  }
+  if (idx === -1) { arr.push(listing); } else { arr.splice(idx, 1); }
   window.setSaved(arr);
-  return idx === -1; // true = now saved
+  return idx === -1;
 };
-
 window.isSaved = (id) => window.getSaved().some(l => l.id === id);
 
-// ── Saved filters (localStorage) ────────────────────────────────
-window.saveFilters = (filters) => {
-  try { localStorage.setItem('hb_filters', JSON.stringify(filters)); }
-  catch { /* ignore */ }
+// Saved filters
+window.saveFilters = (f) => {
+  try { localStorage.setItem('hb_filters', JSON.stringify(f)); } catch {}
 };
-
 window.loadFilters = () => {
-  try { return JSON.parse(localStorage.getItem('hb_filters') || 'null'); }
-  catch { return null; }
-};
-
-// ── Notes per listing ────────────────────────────────────────────
-window.getNote = (id) => {
-  try {
-    const n = JSON.parse(localStorage.getItem('hb_notes') || '{}');
-    return n[id] || '';
-  } catch { return ''; }
-};
-
-window.setNote = (id, text) => {
-  try {
-    const n = JSON.parse(localStorage.getItem('hb_notes') || '{}');
-    n[id] = text;
-    localStorage.setItem('hb_notes', JSON.stringify(n));
-  } catch { /* ignore */ }
+  try { return JSON.parse(localStorage.getItem('hb_filters') || 'null'); } catch { return null; }
 };
