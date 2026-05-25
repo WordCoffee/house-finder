@@ -25,7 +25,7 @@ window.PROVIDERS = {
     maxFreeCalls: 50,
     apiKey:       'YOUR_RENTCAST_KEY',
     // Listings search endpoint (check their docs for exact URL)
-    searchUrl:    'https://api.rentcast.io/v1/listings/sale',
+    searchUrl:    'https://api.rentcast.io/v1/listings/sale', // sale listings
   },
 
   // ── Realty in US (Realtor.com data via RapidAPI) ─────────────
@@ -37,7 +37,7 @@ window.PROVIDERS = {
     maxFreeCalls: 500,
     apiKey:       'YOUR_RAPIDAPI_KEY',
     apiHost:      'realty-in-us.p.rapidapi.com',
-    searchUrl:    'https://realty-in-us.p.rapidapi.com/properties/v3/list',
+    searchUrl:    'https://realty-in-us.p.rapidapi.com/properties/v3/list', // verify current docs
   },
 
   // ── US Real Estate Listings (APImaker via RapidAPI) ──────────
@@ -49,7 +49,7 @@ window.PROVIDERS = {
     maxFreeCalls: 500,
     apiKey:       'YOUR_RAPIDAPI_KEY',
     apiHost:      'us-real-estate-listings.p.rapidapi.com',
-    searchUrl:    'https://us-real-estate-listings.p.rapidapi.com/list',
+    searchUrl:    'https://us-real-estate-listings.p.rapidapi.com/list', // verify current docs
   },
 
   // ── OpenWeb Ninja – Real-Time Zillow Data ────────────────────
@@ -60,7 +60,7 @@ window.PROVIDERS = {
     enabled:      false,
     maxFreeCalls: 250,
     apiKey:       'YOUR_OPENWEB_NINJA_KEY',
-    searchUrl:    'https://YOUR_OPENWEB_NINJA_ENDPOINT',
+    searchUrl:    'https://YOUR_OPENWEB_NINJA_ENDPOINT', // paste your endpoint
   },
 };
 

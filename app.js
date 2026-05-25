@@ -100,7 +100,8 @@ function buildProviderSelect() {
   Object.values(window.PROVIDERS || {}).forEach(p => {
     const o = document.createElement('option');
     o.value = p.id;
-    o.textContent = p.enabled ? p.label : p.label + ' (off)';
+    const status = providerReady(p) ? 'live' : (p.enabled ? 'setup needed' : 'off');
+    o.textContent = `${p.label} (${status})`;
     providerSelect.appendChild(o);
   });
   providerSelect.value = 'sample';
@@ -135,6 +136,10 @@ function updateUsagePill() {
 function getActiveProvider() {
   const id = providerSelect.value || 'sample';
   return (window.PROVIDERS || {})[id] || window.PROVIDERS.sample;
+}
+
+function providerReady(p) {
+  return !!(p && p.enabled && p.apiKey && !String(p.apiKey).includes('YOUR_'));
 }
 
 // ── Read filters ─────────────────────────────────────────────────
@@ -257,8 +262,8 @@ function applyFilters(listings, f) {
 // ── Normalize API data to standard shape ─────────────────────────
 function normalize(raw, providerId) {
   if (Array.isArray(raw)) return raw.map(x => normalizeItem(x, providerId));
-  const list = raw.listings || raw.results || raw.data || raw.properties || [];
-  return list.map(x => normalizeItem(x, providerId));
+  const list = raw.listings || raw.results || raw.data || raw.properties || raw.listing || raw.hits || raw.items || [];
+  return (Array.isArray(list) ? list : [list]).filter(Boolean).map(x => normalizeItem(x, providerId));
 }
 
 function normalizeItem(x, pid) {
@@ -310,15 +315,29 @@ async function fetchFromAPI(provider, filters) {
   }
 
   const params = new URLSearchParams();
-  if (filters.location) {
-    params.set('city',  filters.location);
-    params.set('state', 'TX');
+  const loc = filters.location || 'United States';
+  if (provider.id === 'rentcast') {
+    params.set('status', 'active');
+    if (filters.location) params.set('city', filters.location);
+    if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+    if (filters.minBeds)  params.set('minBeds', filters.minBeds);
+    if (filters.minBaths) params.set('minBaths', filters.minBaths);
+    if (filters.minAcres) params.set('minLotSize', filters.minAcres * 43560);
+    if (filters.maxAcres) params.set('maxLotSize', filters.maxAcres * 43560);
+    params.set('limit', '50');
+  } else if (provider.id === 'realtyUS') {
+    params.set('city', filters.location || '');
+    params.set('state_code', '');
+    params.set('limit', '50');
+  } else if (provider.id === 'usListings') {
+    params.set('location', loc);
+    params.set('limit', '50');
+  } else if (provider.id === 'zillowAlt') {
+    params.set('q', loc);
   }
-  if (filters.maxPrice) params.set('max_price', filters.maxPrice);
-  if (filters.minBeds)  params.set('min_beds', filters.minBeds);
-  params.set('limit', '50');
 
-  const res = await fetch(`${provider.searchUrl}?${params}`, { headers });
+  const url = provider.searchUrl + (provider.searchUrl.includes('?') ? '&' : '?') + params.toString();
+  const res = await fetch(url, { headers });
   if (!res.ok) throw new Error('API error: ' + res.status);
   const data = await res.json();
   return normalize(data, provider.id);
@@ -341,7 +360,7 @@ async function triggerSearch() {
     let listings = await fetchFromAPI(p, f);
     if (window.bumpUsage) window.bumpUsage(p.id);
     listings = applyFilters(listings, f);
-    if (!listings.length && p.id === 'sample') {
+    if (!listings.length) {
       listings = applyFilters(SAMPLE, { ...f, location: '' });
     }
     currentListings = listings;

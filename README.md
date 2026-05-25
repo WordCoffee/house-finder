@@ -74,3 +74,8 @@ Days-on-market sorting will work when the provider returns a matching field such
 ## If you see no houses
 
 If the filter strip is working but no cards appear, clear the location box and click **Reset** once. The sample data is designed to show immediately, but a very specific location or feature combo can hide every listing if the search is too narrow.
+
+
+## Live listings plan
+
+Start with one provider at a time. RentCast is the cleanest first choice because its listings docs say the `/listings` endpoints cover active and historical sale and rental listings across all 50 states. Realty in US is the next option if you want a Realtor.com-like RapidAPI source, and OpenWeb Ninja is useful if you want Zillow-style property search and details. [web:394][web:130][web:273][web:395]
