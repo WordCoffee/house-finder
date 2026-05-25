@@ -37,10 +37,34 @@
     </div>
   </nav>
 
-  <!-- ── FILTER BAR ───────────────────────────────────────────────────── -->
-  <div class="filterbar" id="filterbar">
-    <div class="filterbar-inner">
+  <!-- ── CONTROL STRIP ───────────────────────────────────────────────── -->
+  <div class="control-strip" id="controlStrip">
+    <div class="control-strip-left">
+      <div class="quick-sorts" id="quickSorts">
+        <button class="quick-sort active" data-sort="newest" onclick="setSort('newest')">Newest</button>
+        <button class="quick-sort" data-sort="price_asc" onclick="setSort('price_asc')">Price low → high</button>
+        <button class="quick-sort" data-sort="price_desc" onclick="setSort('price_desc')">Price high → low</button>
+        <button class="quick-sort" data-sort="acres_desc" onclick="setSort('acres_desc')">Lot size</button>
+        <button class="quick-sort" data-sort="days_desc" onclick="setSort('days_desc')">Days on market</button>
+      </div>
+    </div>
+    <div class="control-strip-right">
+      <button class="filter-btn primary" onclick="toggleFilters()">Filters</button>
+      <button class="filter-btn ghost" onclick="resetFilters()">Reset</button>
+      <button class="filter-btn ghost" onclick="saveCurrentFilters()">Save search</button>
+    </div>
+  </div>
 
+  <!-- ── FILTER DRAWER ─────────────────────────────────────────────── -->
+  <div class="filter-drawer hidden" id="filterDrawer">
+    <div class="filter-drawer-header">
+      <div>
+        <div class="drawer-title">Filters</div>
+        <div class="drawer-sub">Refine nationwide results</div>
+      </div>
+      <button class="modal-close" onclick="toggleFilters(false)">✕</button>
+    </div>
+    <div class="filterbar-inner compact">
       <div class="filter-group">
         <label class="filter-label">Status</label>
         <select class="filter-select" id="f_status">
@@ -50,7 +74,6 @@
           <option value="sold">Sold</option>
         </select>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Price</label>
         <div class="range-pair">
@@ -59,7 +82,6 @@
           <input class="filter-input" type="number" id="f_maxPrice" placeholder="$700k" value="700000" />
         </div>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Beds</label>
         <select class="filter-select" id="f_beds">
@@ -71,7 +93,6 @@
           <option value="5">5+</option>
         </select>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Baths</label>
         <select class="filter-select" id="f_baths">
@@ -81,7 +102,6 @@
           <option value="3">3+</option>
         </select>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Type</label>
         <select class="filter-select" id="f_type">
@@ -94,7 +114,6 @@
           <option value="manufactured">Manufactured</option>
         </select>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Acres</label>
         <div class="range-pair">
@@ -103,7 +122,6 @@
           <input class="filter-input" type="number" id="f_maxAcres" placeholder="Max" step="0.5" />
         </div>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Sq Ft</label>
         <div class="range-pair">
@@ -112,7 +130,6 @@
           <input class="filter-input" type="number" id="f_maxSqft" placeholder="Max" />
         </div>
       </div>
-
       <div class="filter-group">
         <label class="filter-label">Year Built</label>
         <div class="range-pair">
@@ -121,7 +138,6 @@
           <input class="filter-input" type="number" id="f_maxYear" placeholder="To" />
         </div>
       </div>
-
       <div class="filter-group wide">
         <label class="filter-label">Features</label>
         <div class="feature-chips" id="featureChips">
@@ -139,29 +155,10 @@
           <button class="chip" data-key="fixerupper" onclick="toggleChip(this)">Fixer upper</button>
         </div>
       </div>
-
-      <div class="filter-group">
-        <label class="filter-label">Sort</label>
-        <select class="filter-select" id="f_sort">
-          <option value="newest">Newest</option>
-          <option value="price_asc">Price ↑</option>
-          <option value="price_desc">Price ↓</option>
-          <option value="acres_desc">Lot size ↓</option>
-          <option value="beds_desc">Beds ↓</option>
-        </select>
-      </div>
-
-      <div class="filter-group actions-group">
-        <button class="filter-btn primary" onclick="triggerSearch()">Apply filters</button>
-        <button class="filter-btn ghost" onclick="resetFilters()">Reset</button>
-        <button class="filter-btn ghost" onclick="saveCurrentFilters()">Save search</button>
-      </div>
-
     </div>
-
-    <div class="filterbar-meta">
-      <div class="result-count" id="resultCount">—</div>
-      <div class="provider-status" id="providerStatus"></div>
+    <div class="drawer-actions">
+      <button class="filter-btn primary" onclick="triggerSearch(); toggleFilters(false);">Apply filters</button>
+      <button class="filter-btn ghost" onclick="toggleFilters(false)">Close</button>
     </div>
   </div>
 

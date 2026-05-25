@@ -57,7 +57,7 @@ Add keys in `config.js`, then switch the source from the bottom-left toolbar.
 ## Current working features
 
 - Nationwide-style search input
-- Filters for status, price, beds, baths, type, acres, sq ft, year built, features, sort
+- Collapsible filters drawer plus always-visible quick sort strip (newest, price, lot size, days on market)
 - Saved homes with heart button
 - Property detail modal
 - Private notes per listing
@@ -67,3 +67,5 @@ Add keys in `config.js`, then switch the source from the bottom-left toolbar.
 ## Next build step
 
 The current UI is polished and functional on sample data. The next practical step is to connect one live provider first, ideally RentCast or Realty in US, then validate the field mapping in `app.js`.
+
+Days-on-market sorting will work when the provider returns a matching field such as `daysOnMarket`, `daysListed`, or `listedDate`.

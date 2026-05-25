@@ -18,6 +18,7 @@ let currentListings  = [];
 let activeFeatures   = new Set();
 let activeModal      = null;
 let mapVisible       = false;
+let drawerVisible    = false;
 
 // ── Sample data ──────────────────────────────────────────────────
 const SAMPLE = [
@@ -107,6 +108,18 @@ function buildProviderSelect() {
 }
 
 function onProviderChange() { updateUsagePill(); }
+function setSort(sort) {
+  document.getElementById('f_sort').value = sort;
+  document.querySelectorAll('.quick-sort').forEach(b => b.classList.toggle('active', b.dataset.sort === sort));
+  triggerSearch();
+}
+
+function toggleFilters(force) {
+  const drawer = document.getElementById('filterDrawer');
+  drawerVisible = typeof force === 'boolean' ? force : !drawerVisible;
+  drawer.classList.toggle('hidden', !drawerVisible);
+}
+
 
 function updateUsagePill() {
   const p = getActiveProvider();
@@ -234,6 +247,7 @@ function applyFilters(listings, f) {
       case 'price_desc': return (b.price || 0) - (a.price || 0);
       case 'acres_desc': return (b.acres || 0) - (a.acres || 0);
       case 'beds_desc':  return (b.beds  || 0) - (a.beds  || 0);
+      case 'days_desc':  return (b.daysOnMarket || 0) - (a.daysOnMarket || 0);
       default:           return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
     }
   });
@@ -271,6 +285,7 @@ function normalizeItem(x, pid) {
     sqft:   Number(sqft)  || 0,
     acres:  Number(acres) || 0,
     year:   Number(x.year_built || x.yearBuilt || 0),
+    daysOnMarket: dom,
     type:   x.type || x.property_type || 'House',
     status: x.status || 'for_sale',
     features: [...new Set(feats)],
@@ -448,6 +463,7 @@ function buildCard(l) {
     [l.baths, 'ba'],
     [l.sqft ? l.sqft.toLocaleString() + ' ft²' : null, null],
     [l.acres ? l.acres + ' ac' : null, null],
+    [l.daysOnMarket ? l.daysOnMarket + ' dom' : null, null],
   ];
   items.forEach(([val, unit]) => {
     if (!val) return;
@@ -644,5 +660,7 @@ function toggleTheme() {
   buildProviderSelect();
   restoreFilters();
   updateSavedCount();
+  const initialSort = document.getElementById('f_sort').value || 'newest';
+  document.querySelectorAll('.quick-sort').forEach(b => b.classList.toggle('active', b.dataset.sort === initialSort));
   loadSample();
 })();
