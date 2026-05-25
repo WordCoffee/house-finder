@@ -69,3 +69,8 @@ Add keys in `config.js`, then switch the source from the bottom-left toolbar.
 The current UI is polished and functional on sample data. The next practical step is to connect one live provider first, ideally RentCast or Realty in US, then validate the field mapping in `app.js`.
 
 Days-on-market sorting will work when the provider returns a matching field such as `daysOnMarket`, `daysListed`, or `listedDate`.
+
+
+## If you see no houses
+
+If the filter strip is working but no cards appear, clear the location box and click **Reset** once. The sample data is designed to show immediately, but a very specific location or feature combo can hide every listing if the search is too narrow.

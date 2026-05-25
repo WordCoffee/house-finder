@@ -225,7 +225,7 @@ function applyFilters(listings, f) {
     if (f.minPrice && l.price  && l.price  < f.minPrice)  return false;
     if (f.minBeds  && l.beds   && l.beds   < f.minBeds)   return false;
     if (f.minBaths && l.baths  && l.baths  < f.minBaths)  return false;
-    if (f.type     && l.type   && l.type.toLowerCase() !== f.type) return false;
+    if (f.type     && l.type   && !l.type.toLowerCase().includes(f.type)) return false;
     if (f.minAcres && l.acres  && l.acres  < f.minAcres)  return false;
     if (f.maxAcres && l.acres  && l.acres  > f.maxAcres)  return false;
     if (f.minSqft  && l.sqft   && l.sqft   < f.minSqft)   return false;
@@ -238,7 +238,8 @@ function applyFilters(listings, f) {
     }
     if (f.location) {
       const loc = (l.city + ' ' + l.state + ' ' + l.zip + ' ' + l.address).toLowerCase();
-      if (!loc.includes(f.location.toLowerCase())) return false;
+      const q = f.location.toLowerCase();
+      if (!(loc.includes(q) || q.includes(loc) || l.state.toLowerCase() === q || l.city.toLowerCase() === q)) return false;
     }
     return true;
   }).sort((a, b) => {
@@ -332,6 +333,7 @@ async function triggerSearch() {
 
   if (!p || !p.enabled || p.id === 'sample') {
     loadSample();
+  updateUsagePill();
     return;
   }
 
@@ -339,6 +341,9 @@ async function triggerSearch() {
     let listings = await fetchFromAPI(p, f);
     if (window.bumpUsage) window.bumpUsage(p.id);
     listings = applyFilters(listings, f);
+    if (!listings.length && p.id === 'sample') {
+      listings = applyFilters(SAMPLE, { ...f, location: '' });
+    }
     currentListings = listings;
     renderListings(listings, f);
     updateUsagePill();
@@ -346,14 +351,19 @@ async function triggerSearch() {
     console.error('Fetch error:', err);
     resultCount.textContent = 'Error loading listings. Showing sample data.';
     loadSample();
+  updateUsagePill();
   }
 }
 
 function loadSample() {
   const f = readFilters();
   const filtered = applyFilters(SAMPLE, f);
-  currentListings = filtered;
-  renderListings(filtered, f);
+  const fallback = filtered.length ? filtered : SAMPLE.filter(x => {
+    const ff = { ...f, location: '' };
+    return applyFilters([x], ff).length;
+  });
+  currentListings = fallback;
+  renderListings(fallback, f);
 }
 
 // ── Render cards ─────────────────────────────────────────────────
@@ -663,4 +673,5 @@ function toggleTheme() {
   const initialSort = document.getElementById('f_sort').value || 'newest';
   document.querySelectorAll('.quick-sort').forEach(b => b.classList.toggle('active', b.dataset.sort === initialSort));
   loadSample();
+  updateUsagePill();
 })();
